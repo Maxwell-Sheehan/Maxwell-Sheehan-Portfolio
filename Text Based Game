@@ -1,0 +1,82 @@
+#Maxwell Sheehan IT140
+def status(current_room, inventory):
+    print('\n' * 2)
+    print('Collect an item in each region to defeat the evil hag')
+    print('You are currently in:', current_room)
+    print(rooms[current_room]['desc'])  # desc of area
+
+    # Print collected items
+    print("Collected items:")
+    for item, collected in inventory.items():
+        if collected:
+            print(item)
+
+    # Check if the current room has an item and print its description
+    if 'item' in rooms[current_room]:
+        print(rooms[current_room]['item_desc'])
+
+    print('You can go:', ', '.join([direction for direction in rooms[current_room].keys() if
+                                    direction != 'item' and direction != 'desc' and direction != 'item_desc']))
+
+
+def main():
+    current_room = 'Long Road'
+    inventory = {'Sword': False, 'Bark of Elves': False, 'Gnome Hair': False, 'Flower of Sage': False,
+                 'Swamp Water': False, 'Soldier Blood': False}
+
+    while True:
+        status(current_room, inventory)
+
+        move = input("Enter your move: ")
+
+        if move == 'exit':
+            print('Thanks for playing')
+            break
+
+        if move in rooms[current_room]:
+            current_room = rooms[current_room][move]
+            if 'item' in rooms[current_room]:
+                item = rooms[current_room]['item']
+                if item in inventory and not inventory[item]:
+                    print("You found", item)
+                    inventory[item] = True
+        else:
+            print('You cannot go that way')
+
+        if current_room == 'Hags Den' and not all(inventory.values()):
+            print(
+                'You failed to collect all items and the hag defeated you. You might need to be more prepared next time. GAME OVER')
+            break
+        elif current_room == 'Hags Den' and all(inventory.values()):
+            print(
+                'You gathered all the materials around your kingdom and turned them into a salve to coat your sword.')
+            print('You steel yourself and fight the hag successfully, saving your kingdom. YOU WIN!')
+            break
+
+
+rooms = {
+    'Long Road': {'South': 'Battlefield', 'East': 'City',
+                  'desc': 'The long road lies before you filled with potential'},
+    'City': {'West': 'Long Road', 'item': 'Sword', 'desc': 'A bustling city with many a blacksmith present.',
+             'item_desc': 'A glistening sword stands at a podium calling to you'},
+    'Battlefield': {'West': 'Forest', 'North': 'Long Road', 'East': 'Great Hills', 'South': 'Swamp Entrance',
+                    'item': 'Soldier Blood',
+                    'desc': 'Before you lies an open battlefield, still covered in the blood and viscera of fallen soldiers.',
+                    'item_desc': 'While you feel bad disrupting the dead, you know the solders blood contains her mana, you collect some'},
+    'Forest': {'East': 'Battlefield', 'item': 'Bark of Elves',
+               'desc': 'A rich forest long abandoned by the elves, trees themselves still shimmer with mana.',
+               'item_desc': 'The bark is famous for the magical property it holds, you collect some.'},
+    'Swamp Entrance': {'North': 'Battlefield', 'East': 'Hags Den', 'item': 'Swamp Water',
+                       'desc': "This is the turning point to the swamp queen's lair, an unprepared adventurer could meet a swift end.",
+                       'item_desc': 'You notice the putrid mana coming from the swamp water, but you know the contents are important.'},
+    'Great Hills': {'North': 'Gnome Grotto', 'West': 'Battlefield', 'item': 'Flower of Sage',
+                    'desc': 'A rich flower field lies before you on the roaring hills, what lies beyond the hills lies a gnome settlement',
+                    'item_desc': 'You see a few scattered flowers across some of the hills you can sense the mana coming from them, you  harvest some.'},
+    'Gnome Grotto': {'South': 'Great Hills', 'item': 'Gnome Hair',
+                     'desc': 'A small gnome stirring a potion lies before you',
+                     'item_desc': 'You see a gnome offer a small piece of his hair for a potion he knows you need.'},
+    'Hags Den': {'West': 'Swamp Entrance', 'desc': 'Steel yourself for the battle ahead.'},
+    'exit': {}
+}
+
+main()
