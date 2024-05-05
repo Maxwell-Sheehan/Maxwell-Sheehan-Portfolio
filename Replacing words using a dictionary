@@ -1,0 +1,22 @@
+#collects our first string, this will be the words, and their replacement
+string = input()
+
+#we need to split the words into a group
+string_group = string.split()
+
+#sicne we are comparing values a dictionary is perfect for this so we can convert the replacements words into a dictionary with the words being replaced being keys and values
+string_dict = {string_group[i]: string_group[i+1] for i in range(0, len(string_group), 2)}
+
+#this is taking our sentance and seperating it into a list so we can compare it word by word for our dictionary
+sen = input()
+sen_list = sen.split()
+
+#this is checking each word in our sen list, if a word is in the list we replaced it with the word in the string dictionary
+for word in sen_list:
+    if word in string_dict:
+        print(string_dict[word], end=' ')
+        
+#if the word is not in the string dictionary we iteratre through our list        
+    else:
+        print(word, end=' ',)
+        
